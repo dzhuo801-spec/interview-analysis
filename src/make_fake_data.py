@@ -3,7 +3,13 @@
 惯例：先用假数据把流程跑通，再换成真数据。
 好处：把「技术问题」和「数据问题」分开解决，不然两种问题混在一起很难排错。
 
-运行：py src/make_fake_data.py
+运行：py src/make_fake_data.py  （或 .venv\\Scripts\\python.exe src\\make_fake_data.py）
+
+[!] 注意：这个脚本是【一次性】的。
+    每跑一次，都会用随机数重新生成 data/interviews.csv，把旧数据覆盖掉 ——
+    于是词频会全变，README.md 和 exercises_D1.md 里记录的对照数字（的28 了21 …）
+    就对不上了。
+    只在【确实想换一批数据】时才跑它；平时只看数据、跑分析，不要跑这个。
 """
 import csv
 import os
