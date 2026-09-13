@@ -5,6 +5,8 @@
       <excludeFolder url="file://$MODULE_DIR$/../.venv" />
       <excludeFolder url="file://$MODULE_DIR$/../__pycache__" />
       <excludeFolder url="file://$MODULE_DIR$/../.matplotlib" />
+      <excludeFolder url="file://$MODULE_DIR$/../dafeiyu-pet/dafeiyu-pet-main/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/../survival-demo/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (C:\Python312\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
