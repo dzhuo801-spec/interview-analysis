@@ -9,12 +9,9 @@ venv/
 env/
 
 # ---- IDE ----
-# 注意：这里故意不忽略 .idea/
-# 因为里面存着「用哪个 Python 解释器」的配置（C:\Python312\python.exe），
-# 保留它 = 换电脑或重装后打开项目就能直接跑，不用重新配解释器。
-# 但 IDE 的个人界面设置不传：
-.idea/workspace.xml
-.idea/shelf/
+# .idea/ 是整个忽略掉：里面是 PyCharm 的个人配置，跟项目代码无关，
+# 传上去只会让仓库变乱。别人 clone 后用自己的 IDE 重新配解释器就行。
+.idea/
 .vscode/
 *.swp
 
