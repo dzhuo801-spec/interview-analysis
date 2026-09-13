@@ -1,0 +1,31 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.Python
+
+# ---- 虚拟环境 ----
+.venv/
+venv/
+env/
+
+# ---- IDE ----
+.idea/
+.vscode/
+*.swp
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+
+# ---- matplotlib 字体缓存 ----
+.matplotlib/
+
+# ---- 数据（原始数据量大的时候只传脚本，不传数据）----
+# 处理后的中间结果不传：
+data/processed/
+# 原始数据看情况，小文件可以传，大文件写清来源：
+# data/raw/*.csv
+
+# ---- 系统 ----
+.DS_Store
+Thumbs.db
+desktop.ini
