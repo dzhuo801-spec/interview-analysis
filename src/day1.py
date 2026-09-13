@@ -1,6 +1,17 @@
 """day1.py —— 读数据 → 统计 → 出图（D1 的最小可用版本）
 
-运行：py src/day1.py
+运行：.venv\\Scripts\\python.exe src/day1.py
+
+[!] 运行命令的坑（2026-09-13 实测更正，别搞错）
+    这个项目【一律用 .venv 的解释器】，原因是：
+
+      python  命令        → 完全不能用：0 字节商店空壳，退出码 9009
+      py src/day1.py     → 会崩：py 指向全局 Python，只有 4 个包
+                            → ModuleNotFoundError: No module named 'matplotlib'
+      .venv\\Scripts\\python.exe src/day1.py  → ✅ 正确（matplotlib/jieba 都在这）
+
+    你可能还记得"用 py 不要用 python" —— 那条仍然对，但对本项目不够：
+    py 只能跑纯标准库的脚本，一旦用到 pandas / matplotlib / jieba 就必须用 venv。
 
 [!] 这个文件里有几处标着 TODO，是要你自己写的。
    读完全部代码，理解每一行，再把 TODO 补上。

@@ -2,7 +2,7 @@
 
 规则：
   [禁止] 不许看 day1.py，不许搜答案
-  [OK] 写完运行：py tests/week1_test.py
+  [OK] 写完运行：.venv\Scripts\python.exe tests/week1_test.py
   [OK] 目标：6 道题全部 PASS
 
 每题下面的 `TODO` 就是你要写的地方。写完后运行本文件自查。

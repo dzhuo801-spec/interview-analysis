@@ -4,7 +4,8 @@
 → 周四的练习是「一次读取多个访谈文件」，一个文件测不出来。
 → 顺便模拟真实场景：你的田野调查通常分好几批做，文件也是好几个。
 
-运行：py src/make_fake_data2.py  （或 .venv\\Scripts\\python.exe src\\make_fake_data2.py）
+运行：.venv\\Scripts\\python.exe src\\make_fake_data2.py
+      （这个脚本只用标准库，用 `py` 也能跑；但项目里统一用 venv，省得记）
 
 [!] 注意：这个脚本是【一次性】的。
     每跑一次都会随机重新生成 data/interviews_batch2.csv，覆盖旧数据。

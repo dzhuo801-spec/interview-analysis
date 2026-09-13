@@ -39,18 +39,35 @@
 
 ## 🚀 怎么运行
 
+> ⚠️ **命令说明**（2026-09-13 实测，这里有两层坑）
+>
+> | 命令 | 结果 |
+> |---|---|
+> | `python` | ❌ **完全不能用** —— Windows 商店的 0 字节占位程序，`python --version` 输出为空、退出码 9009 |
+> | `py` | ✅ 可用，但它指向**全局** Python —— 只有 4 个包 |
+> | `py src\day1.py` | ❌ **会崩**：`ModuleNotFoundError: No module named 'matplotlib'` |
+> | **`.venv\Scripts\python.exe`** | ✅ **本项目一律用这条** —— pandas / matplotlib / jieba 都装在这里 |
+>
+> 一句话：**`python` 不能用；`py` 只能跑纯标准库的脚本；项目脚本全部用 venv 的解释器。**
+
 ```bash
 # 1. 创建虚拟环境（首次）
 py -m venv .venv
 
 # 2. 安装依赖
-.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\pip.exe install -r requirements.txt
 
-# 3. 生成测试数据
-.venv\Scripts\python src\make_fake_data.py
+# 3. 生成测试数据（⚠️ 一次性脚本，会覆盖 data/ 里的数据）
+.venv\Scripts\python.exe src\make_fake_data.py
 
 # 4. 运行分析并出图
-.venv\Scripts\python src\day1.py
+.venv\Scripts\python.exe src\day1.py
+
+# 5. 跑周测
+.venv\Scripts\python.exe tests\week1_test.py
+
+# 6. 跑 SQL 练习
+.venv\Scripts\python.exe sql\02_practice.py
 ```
 
 **Windows 用户也可以直接双击** `运行day1.bat`。

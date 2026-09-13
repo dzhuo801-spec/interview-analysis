@@ -3,7 +3,8 @@
 惯例：先用假数据把流程跑通，再换成真数据。
 好处：把「技术问题」和「数据问题」分开解决，不然两种问题混在一起很难排错。
 
-运行：py src/make_fake_data.py  （或 .venv\\Scripts\\python.exe src\\make_fake_data.py）
+运行：.venv\\Scripts\\python.exe src\\make_fake_data.py
+      （这个脚本只用标准库，用 `py` 也能跑；但项目里统一用 venv，省得记）
 
 [!] 注意：这个脚本是【一次性】的。
     每跑一次，都会用随机数重新生成 data/interviews.csv，把旧数据覆盖掉 ——

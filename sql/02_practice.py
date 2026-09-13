@@ -2,7 +2,7 @@
 
 用法：
     1. 改下面 QUERIES 里的 SQL 语句
-    2. 运行：py sql/02_practice.py
+    2. 运行：.venv\Scripts\python.exe sql/02_practice.py
     3. 看输出结果对不对
 
 为什么要这个？
@@ -72,7 +72,7 @@ def show(cursor, rows):
 def main():
     if not os.path.exists(DB):
         print(f"找不到数据库 {DB}")
-        print("先运行：py sql/01_setup_db.py")
+        print("先运行：.venv\\Scripts\\python.exe sql/01_setup_db.py")
         return
 
     conn = sqlite3.connect(DB)

@@ -4,7 +4,7 @@
 → Python 自带 sqlite3，不用装 MySQL、不用配服务，一条命令就有能写 SQL 的库。
 → 以后你装 MySQL 了，语法 90% 通用，学了不浪费。
 
-运行：py sql/01_setup_db.py
+运行：.venv\Scripts\python.exe sql/01_setup_db.py
 """
 import os
 import sqlite3
