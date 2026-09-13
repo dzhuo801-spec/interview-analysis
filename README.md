@@ -64,16 +64,16 @@ interview-analysis/
 ├── README.md
 ├── requirements.txt        ← 依赖清单
 ├── 运行day1.bat            ← 双击运行的启动器
+├── 打开命令行.bat          ← 双击打开已定位好的终端
+├── exercises_D1.md         ← 练习与思考记录
 ├── src/
 │   ├── make_fake_data.py   ← 生成模拟访谈语料
-│   ├── day1.py             ← 主脚本：读取→统计→分词→出图
-│   └── font_test.py        ← matplotlib 中文字体验证
+│   └── day1.py             ← 主脚本：读取→统计→分词→出图
 ├── data/
 │   └── interviews.csv      ← 数据
 └── output/                 ← 生成的图表
     ├── speaker_count.png
-    ├── word_freq.png
-    └── font_test.png
+    └── word_freq.png
 ```
 
 ---
