@@ -31,3 +31,10 @@ data/processed/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ---- 数据库文件（由脚本重新生成，不必上传）----
+*.db
+*.sqlite3
+
+# ---- 周测临时文件 ----
+tests/_tmp/
