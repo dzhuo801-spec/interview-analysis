@@ -101,41 +101,33 @@ def plot_bar(counter, top_n, title, outpath, color="#4C8BF5"):
     fig.savefig(outpath, dpi=100)
     plt.close(fig)                   # 关掉，不然图多了会占内存
     return outpath
-
-
-# ============ 主流程 ============
-if __name__ == "__main__":
-    # 所有路径都用相对项目根目录的写法
-    data_path = os.path.join(BASE, "data", "interviews.csv")
-    out_dir = os.path.join(BASE, "output")
-    os.makedirs(out_dir, exist_ok=True)
-
-    # 1. 读
-    rows = read_data(data_path)
+def show_summary(rows, speaker_count, word_count):
     print(f"共读入 {len(rows)} 条记录\n")
-
-    # 2. 看着一眼数据长什么样（好习惯：拿到数据先看，别急着分析）
     print("前 3 条记录：")
     for row in rows[:3]:
         print("  ", row)
     print()
-
-    # 3. 谁说得最多
-    speaker_count = count_by_speaker(rows)
     print("每个人说了几句：")
     for name, count in speaker_count.most_common():
         print(f"  {name}: {count} 句")
     print()
-
-    # 4. 词频（先看原始结果，包括没意义的词）
-    word_count = count_words(rows)
     print(f"总共 {sum(word_count.values())} 个词，不重复的有 {len(word_count)} 个")
     print("出现最多的 15 个词：")
     for word, count in word_count.most_common(15):
         print(f"  {word}: {count} 次")
     print()
-
-    # 5. 出两张图
+# ============ 主流程 ============
+def main():
+    # 所有路径都用相对项目根目录的写法
+    data_path = os.path.join(BASE, "data", "interviews.csv")
+    out_dir = os.path.join(BASE, "output")
+    os.makedirs(out_dir, exist_ok=True)
+    rows = read_data(data_path)
+    speaker_count = count_by_speaker(rows)
+    word_count = count_words(rows)
+    show_summary(rows, speaker_count, word_count)
+    # 放在这里最合适，主要是放在这里rows, speaker_count, word_count，
+    # 如果放在rows = read_data(data_path)后面的话只能用rows，而speaker_count, word_count是不能使用的，会冲突的
     p1 = plot_bar(speaker_count, top_n=4,
                   title="各说话人发言句数",
                   outpath=os.path.join(out_dir, "speaker_count.png"),
@@ -144,11 +136,13 @@ if __name__ == "__main__":
                   title="词频 Top 15（未去停用词）",
                   outpath=os.path.join(out_dir, "word_freq.png"),
                   color="#F5A623")
-
     print("图已生成：")
     print("  ", p1)
     print("  ", p2)
-
+# 我预想的是因为局部，def show_summary(rows, speaker_count, word_count)与
+# show_summary(rows, speaker_count, word_count)之间没有包含进去，最重要的是show里面没有包含P1,P2的东西。
+if __name__ == '__main__':
+    main()
 
 # ================================================================
 # TODO（明天做，不是今天的）

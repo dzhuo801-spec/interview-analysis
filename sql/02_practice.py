@@ -39,9 +39,19 @@ QUERIES = [
     ("练习5: 查出所有部门", """
         SELECT * FROM departments
     """),
-
-    # ---------- 下面是留给你填的（本周每天加一条）----------
-    # ("练习6: 你的 SQL 标题", """
+    ("练习6：查出姓名+城市","""
+        SELECT name,city FROM employees
+    """),
+    ("练习7：查工资最高的3人","""
+        SELECT name,salary FROM employees ORDER BY salary DESC LIMIT 3
+    """),
+    ("练习8:查所有部门名","""
+        SELECT name FROM departments 
+    """),
+    ("练习9：定表单前3名","""
+        SELECT * FROM orders LIMIT 3
+    """)
+    #
     #     SELECT ...
     # """),
 ]
