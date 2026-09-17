@@ -101,6 +101,12 @@ def plot_bar(counter, top_n, title, outpath, color="#4C8BF5"):
     fig.savefig(outpath, dpi=100)
     plt.close(fig)                   # 关掉，不然图多了会占内存
     return outpath
+def save_result(counter,outpath):
+    with open("word_freq.csv","w",encoding="uft-8-sig",newline="") as f:
+        writer=csv.writer(f)
+        writer.writerow(["词","次"])
+        for word,count in counter.most_common:
+            writer.writerow([word,count])
 def show_summary(rows, speaker_count, word_count):
     print(f"共读入 {len(rows)} 条记录\n")
     print("前 3 条记录：")
@@ -136,14 +142,18 @@ def main():
                   title="词频 Top 15（未去停用词）",
                   outpath=os.path.join(out_dir, "word_freq.png"),
                   color="#F5A623")
+    p3 = plot_bar(word_count, top_n=15,
+                  title="词频 Top 15（未去停用词）",
+                  outpath=os.csv(out_dir, "word_freq.png"),
+                  color="#F5A623")
     print("图已生成：")
     print("  ", p1)
     print("  ", p2)
+
 # 我预想的是因为局部，def show_summary(rows, speaker_count, word_count)与
 # show_summary(rows, speaker_count, word_count)之间没有包含进去，最重要的是show里面没有包含P1,P2的东西。
 if __name__ == '__main__':
     main()
-
 # ================================================================
 # TODO（明天做，不是今天的）
 # ----------------------------------------------------------------

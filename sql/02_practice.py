@@ -50,7 +50,75 @@ QUERIES = [
     """),
     ("练习9：定表单前3名","""
         SELECT * FROM orders LIMIT 3
-    """)
+    """),
+    ("练习10：查出所有北京员工","""
+        SELECT name,city FROM employees WHERE city = '北京' 
+    """),
+    ("练习11：查出工资大于 20000 的员工姓名和工资","""
+        SELECT name,salary FROM employees WHERE salary >20000
+    """),
+    ("练习12：查出工资在 10000 到 20000 之间的员工","""
+        SELECT name,salary FROM employees WHERE salary BETWEEN 10000 AND 20000
+    """),
+    ("练习13：查出没有上级的员工（manager_id 是空的）","""
+        SELECT name,manager_id FROM employees WHERE manager_id IS NULL
+    """),
+    # NULL表示未知
+    ("练习14：查出姓张的员工","""
+       SELECT name FROM employees WHERE name LIKE '张%'
+   """),
+    ("练习16：用 IN 查多个城市","""
+     SELECT name,city FROM employees WHERE city in ('北京','上海')
+    """),
+    ("练习17：括号别省（AND + OR）","""
+     SELECT name,city,salary FROM employees WHERE salary > 20000 AND (city ='北京' OR city='上海')
+    """),
+    ("练习18：_ 和 % 的区别","""
+     SELECT name FROM employees WHERE name LIKE '__'
+    """),
+    ("练习18.2：_ 和 % 的区别","""
+     SELECT name FROM employees WHERE name LIKE '___'
+    """),
+    ("练习18.3：_ 和 % 的区别","""
+     SELECT name FROM employees WHERE name LIKE '陈%'
+    """),
+    ("练习19：= NULL 为什么查不出东西","""
+     SELECT name,manager_id FROM employees WHERE manager_id =NULL
+    """),
+    # 因为NULL不是空值，它是未知，当你等于的时候，他就只能返回不知道，没有，而且NULL只能使用is与not is来判断书写
+    ("练习19.2：= NULL 为什么查不出东西","""
+     SELECT name,manager_id FROM employees WHERE manager_id IS NULL
+    """),
+    ("练习19.3：= NULL 为什么查不出东西","""
+     SELECT name,manager_id FROM employees WHERE manager_id IS NOT NULL
+    """),
+    ("练习20：= 数一共有几个员工","""
+     SELECT COUNT(*) FROM employees 
+    """),
+    ("练习21：= COUNT(*) vs COUNT(列)","""
+     SELECT COUNT(*),COUNT(manager_id) FROM employees 
+    """),
+    ("练习22：= 数有几个不同的城市","""
+     SELECT COUNT(DISTINCT(city)) FROM employees 
+    """),
+    ("练习23：= 平均工资","""
+     SELECT AVG(salary) FROM employees
+     """),
+    ("练习24:最高和最低工资：","""
+     SELECT MAX(salary),min(salary) FROM employees
+     """),
+    ("练习25：工资总和 ","""
+     SELECT sum(salary) FROM employees
+     """),
+    ("练习25：自己验算","""
+    SELECT sum(salary)/COUNT(*)FROM employees
+    """),
+    ("练习26：最高和最低差多少","""
+     SELECT max(salary)-min(salary) FROM employees
+     """),
+    ("练习27：订单表统计","""
+     SELECT COUNT(*),sum(amount),sum(amount)/COUNT(*)FROM orders
+     """),
     #
     #     SELECT ...
     # """),
