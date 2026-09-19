@@ -46,3 +46,51 @@ print(find_max(rows, "id"))
 def filter_rows(rows, field, value):
     return list(filter(lambda x:x[field]==value,rows))
 print(filter_rows(rows, "speaker", "受访者A"))
+# 31
+def pair_up(names, scores):
+    return dict(zip(names,scores))
+def find_index(items, target):
+    for i,n in enumerate(items):
+        if n == target:
+            return i
+    return -1
+
+print(pair_up(["张伟", "李娜", "王强"], [88, 95, 72]))
+print(find_index(["a", "b", "c"], "b"))
+print(find_index(["a", "b", "c"], "z"))
+# 32 在函数中与赋值时不同，在函数中收集是元组，在赋值时候解包是列表。**在函数中是字典，属于关键字参数
+def show_args(*args, **kwargs):
+    return args,kwargs
+print(show_args(1, 2, 3, x=4, y=5))
+# 33
+def to_int(text):
+    try:
+        return int(text)
+    except ValueError:
+        return None
+def safe_index(items, i):
+    try:
+        return items[i]
+    except IndexError:
+        return None
+print(to_int("42"))
+print(to_int("abc"))
+print(to_int(""))
+
+print(safe_index([1,2,3], 1))
+print(safe_index([1,2,3], 9))
+# 34
+class NegativeError(Exception):
+    pass
+def sqrt_approx(x):
+    if x>=0:
+        return x**0.5
+    else:
+        raise NegativeError(f"不能对负数开平方:{x}")
+try:
+    print(sqrt_approx(9))
+    print(sqrt_approx(-4))
+except NegativeError as e:
+    print("接住了：",e)
+
+
