@@ -119,6 +119,32 @@ QUERIES = [
     ("练习27：订单表统计","""
      SELECT COUNT(*),sum(amount),sum(amount)/COUNT(*)FROM orders
      """),
+    ("练习28：每个部门几个人","""
+     SELECT dept_id,COUNT(*) AS 人数 FROM employees GROUP BY dept_id
+     """),
+    # AS 后面加你自己想要的命令名
+    ("练习29：每个城市平均工资（降序）","""
+     SELECT city,avg(salary) AS 平均工资 FROM employees GROUP BY city ORDER BY avg(salary) DESC
+     """),
+    ("练习30：每个部门最高工资","""
+     SELECT dept_id,MAX(salary) AS 最高工资 FROM employees GROUP BY dept_id
+     """),
+    ("练习31：人数超过 4 人的部门","""
+     SELECT dept_id,COUNT(dept_id) FROM employees GROUP BY dept_id HAVING COUNT(dept_id)>4
+     """),
+    ("练习32：平均工资超过 20000 的城市","""
+     SELECT city,avg(salary) AS 平均工资 FROM employees GROUP BY city HAVING avg(salary)>20000
+     """),
+    # ("练习32.2：平均工资超过 20000 的城市","""
+    #  SELECT city,avg(salary) AS 平均工资 FROM employees WHERE avg(salary)>20000 GROUP BY city
+    # """),
+    # OperationalError: misuse of aggregate: avg()不能使用
+    ("练习33：一条 SQL 出三列统计","""
+     SELECT dept_id,COUNT(dept_id) AS 人数,avg(salary) AS 均薪,max(salary) AS 最高 FROM employees GROUP BY dept_id
+     """),
+    ("练习34：各城市人数（降序）","""
+     SELECT city,COUNT(city) AS 人数 FROM employees GROUP BY city ORDER BY COUNT(city) DESC
+     """),
     #
     #     SELECT ...
     # """),
