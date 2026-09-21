@@ -51,11 +51,9 @@ DB = os.path.join(BASE, "sql", "practice.db")
 #
 # 【涉及】IN / BETWEEN / AND / ORDER BY DESC
 # ============================================================
-Q1 = """
-SELECT ...
-"""
-
-
+Q1 =("""
+    SELECT name,city,salary FROM employees WHERE salary BETWEEN 15000 AND 30000 AND(city IN ('北京','上海')) ORDER BY salary DESC
+    """)
 # ============================================================
 # 题 2（10 分）IS NULL
 #
@@ -74,9 +72,9 @@ SELECT ...
 #
 # 【涉及】IS NULL（⚠️ 不能用 `= NULL`，那样查出来是 0 行）
 # ============================================================
-Q2 = """
-SELECT ...
-"""
+Q2 =("""
+SELECT name,salary FROM employees WHERE manager_id IS NULL ORDER BY salary DESC
+""")
 
 
 # ============================================================
@@ -92,9 +90,9 @@ SELECT ...
 #
 # 【涉及】COUNT / AVG / MAX / MIN（四个一起写，不分行）
 # ============================================================
-Q3 = """
-SELECT ...
-"""
+Q3 =("""
+SELECT COUNT(*),AVG(salary),MAX(salary),MIN(salary) FROM employees
+""")
 
 
 # ============================================================
@@ -117,10 +115,12 @@ SELECT ...
 #
 # 【涉及】GROUP BY / COUNT / AVG / ORDER BY
 # 【提示】GROUP BY 后面写 dept_id（要分组的那一列）
+# ⚠️ 这题的小数**保留 2 位**（跟示例一致）。**不要**写 ROUND(AVG(salary), 1)
+#    —— 那是第 8 题的要求，写这会差 0.03 被判错。不写 ROUND、原样输出也是对的。
 # ============================================================
-Q4 = """
-SELECT ...
-"""
+Q4 =("""
+SELECT dept_id,COUNT(dept_id) AS 人数,AVG(salary) AS 均新 FROM employees GROUP BY dept_id ORDER BY dept_id ASC
+""")
 
 
 # ============================================================
@@ -139,10 +139,11 @@ SELECT ...
 #
 # 【涉及】GROUP BY / HAVING
 # ⚠️ **必须用 HAVING，不能用 WHERE**（WHERE 里不能写聚合函数）
+# ⚠️ 小数**保留 2 位**（跟示例一致），同样**不要**用 ROUND(..., 1)。
 # ============================================================
-Q5 = """
-SELECT ...
-"""
+Q5 =("""
+SELECT dept_id,avg(salary) FROM employees GROUP BY dept_id HAVING AVG(salary)>20000 
+""")
 
 
 # ============================================================
@@ -163,9 +164,9 @@ SELECT ...
 #
 # 【涉及】GROUP BY / COUNT / AVG / HAVING / ORDER BY DESC
 # ============================================================
-Q6 = """
-SELECT ...
-"""
+Q6 =("""
+    SELECT city,COUNT(city) AS 人数,AVG(salary) AS 均薪 FROM employees GROUP BY city HAVING COUNT(city)>3 ORDER BY AVG(salary) DESC
+    """)
 
 
 # ============================================================
@@ -184,9 +185,9 @@ SELECT ...
 # 【涉及】LIKE + % / OR / COUNT(*)
 # 【提示】`name LIKE '张%' OR name LIKE '陈%'`
 # ============================================================
-Q7 = """
-SELECT ...
-"""
+Q7 =("""
+SELECT COUNT(*) FROM employees WHERE name LIKE '张%' OR name LIKE '陈%'
+""")
 
 
 # ============================================================
@@ -211,9 +212,9 @@ SELECT ...
 #   - 四舍五入 1 位小数：ROUND(AVG(salary), 1)
 #   - 排序用 AVG(salary) 或它的别名都行
 # ============================================================
-Q8 = """
-SELECT ...
-"""
+Q8 =("""
+    SELECT dept_id,COUNT(dept_id) AS 人数,MAX(salary) AS 最高,MIN(salary) AS 最低,ROUND(AVG(salary),1) AS 均薪 FROM employees GROUP BY dept_id ORDER BY avg(salary) DESC
+    """)
 
 
 # ============================================================

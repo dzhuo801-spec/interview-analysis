@@ -92,5 +92,33 @@ try:
     print(sqrt_approx(-4))
 except NegativeError as e:
     print("接住了：",e)
-
+# 8
+def write_lines(lines, path):
+    s="\n"
+    v=0
+    with open(path,"w",encoding="utf-8-sig") as f:
+        for i in lines:
+            i=i+s
+            f.write(i)
+            v+=1
+    return v
+print(write_lines(["第一行", "第二行", "第三行"], "out.txt"))
+# 9
+def read_lines(path):
+    with open(path,"r",encoding="utf-8-sig") as f:
+        lines=[line.strip() for line in f if line.strip()]
+    return lines
+print(read_lines("out.txt"))
+# 10
+def append_line(text, path):
+    s="\n"
+    with open(path,"a",encoding="utf-8-sig") as f:
+        i=text+s
+        f.write(i)
+def read_lines(path):
+    with open(path,"r",encoding="utf-8-sig") as f:
+        lines=[line.strip() for line in f if line.strip()]
+        return lines
+append_line("第四行", "out.txt")
+print(read_lines("out.txt"))
 

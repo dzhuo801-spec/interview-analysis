@@ -145,6 +145,22 @@ QUERIES = [
     ("练习34：各城市人数（降序）","""
      SELECT city,COUNT(city) AS 人数 FROM employees GROUP BY city ORDER BY COUNT(city) DESC
      """),
+    ("练习35：先筛行，再分组","""
+     SELECT dept_id,COUNT(*) AS 人数 FROM employees WHERE salary>15000 GROUP BY dept_id
+     """),
+    ("练习36：先分组，再筛组","""
+     SELECT dept_id,AVG(salary) AS 平均工资 FROM employees GROUP BY dept_id HAVING AVG(salary)>20000
+     """),
+    ("练习37：证明 WHERE 里不能写聚合","""
+     SELECT dept_id,AVG(salary) AS 平均工资2 FROM employees GROUP BY dept_id HAVING AVG(salary)>20000
+     """),
+# 报错: OperationalError: misuse of aggregate: AVG()
+    ("练习38：WHERE 和 HAVING 一起用","""
+     SELECT dept_id,COUNT(dept_id) FROM employees WHERE salary >15000 GROUP BY dept_id HAVING COUNT(dept_id)>3
+     """),
+    ("练习39：部门内中高层人数","""
+     SELECT dept_id,COUNT(dept_id) AS 人数 FROM employees WHERE salary >10000 GROUP BY dept_id 
+     """),
     #
     #     SELECT ...
     # """),

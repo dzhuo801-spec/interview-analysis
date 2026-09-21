@@ -223,14 +223,18 @@ print(read_lines("不存在的文件.txt"))
 #   6. 文件不存在不能崩（返回 {}）
 # ============================================================
 def count_by_field(csv_path, field):
-    with open(csv_path, encoding="utf-8-sig") as f:
-        rows=list(csv.DictReader(f))
-    return rows
-
-
-
-
-print(count_by_field(".../interviews.csv", "speaker"))
+    try:
+        with open(csv_path, encoding="utf-8-sig") as f:
+            rows=csv.DictReader(f)
+            d = {}
+            for r in rows:
+                v = (r.get(field) or "").strip()
+                if v:
+                    d[v] =d.get(v,0)+1
+            return dict(sorted(d.items(), key=lambda x:x[1], reverse=True))
+    except FileNotFoundError:
+        return {}
+count_by_field(".../interviews.csv", "speaker")
 # ============================================================
 # 题 7（12 分）CSV 写 + 编码 + 目录
 # 📖 用到的新知识 → 看 `手册\文件与CSV精讲.md`（第 8 步）
