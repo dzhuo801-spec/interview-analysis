@@ -161,6 +161,54 @@ QUERIES = [
     ("练习39：部门内中高层人数","""
      SELECT dept_id,COUNT(dept_id) AS 人数 FROM employees WHERE salary >10000 GROUP BY dept_id 
      """),
+    ("练习40： 员工 + 部门名","""
+    SELECT e.name,d.name AS 部门 FROM employees e INNER JOIN departments d ON e.dept_id=d.id
+    """),
+    ("练习41：每个部门几个人（带部门名）","""
+    SELECT d.name AS 部门,COUNT(e.dept_id) AS 人数 FROM employees e INNER JOIN departments d ON e.dept_id=d.id GROUP BY dept_id
+    """),
+    ("练习42：有订单的用户是谁","""
+    SELECT DISTINCT(e.name) AS 姓名 FROM employees e INNER JOIN orders o ON e.id=o.user_id
+    """),
+    ("练习43：订单明细（带用户名）","""
+    SELECT o.id,e.name,o.amount FROM employees e INNER JOIN orders o ON e.id=o.user_id
+    """),
+    ("练习44：每个下单用户的总金额（降序）","""
+    SELECT e.name,sum(o.amount) AS 总额 FROM employees e INNER JOIN orders o ON e.id=o.user_id GROUP BY name ORDER BY sum(o.amount) DESC 
+    """),
+    ("练习45：下单用户的平均工资","""
+    SELECT AVG(DISTINCT salary) FROM employees e INNER JOIN orders o ON e.id=o.user_id 
+    """),
+    ("练习45.2：下单用户的平均工资","""
+    SELECT AVG(salary) FROM employees e INNER JOIN orders o ON e.id=o.user_id 
+    """),
+    ("练习46：三表连接","""
+    SELECT e.name,d.name AS 部门,o.amount AS 订单金额 FROM employees e JOIN departments d ON e.dept_id=d.id JOIN orders o ON e.id=o.user_id 
+    """),
+    ("练习47：每个人的订单数（含没下单的）","""
+    SELECT e.name,COUNT(o.id) AS 订单数 FROM employees e LEFT JOIN orders o ON e.id = o.user_id GROUP BY e.id
+    """),
+    ("练习48：COUNT(*)","""
+    SELECT e.name,COUNT(*) AS 订单数 FROM employees e LEFT JOIN orders o ON e.id=o.user_id GROUP BY e.id
+    """),
+    ("练习48.2 COUNT(*)","""
+    SELECT e.name,COUNT(o.id) AS 订单数 FROM employees e LEFT JOIN orders o ON e.id = o.user_id GROUP BY e.id 
+    """),
+    ("练习49：找出没下过单的员工","""
+    SELECT e.name FROM employees e LEFT JOIN orders o ON e.id = o.user_id WHERE o.id IS NULL
+    """),
+    ("练习50：各部门订单总额（含没订单的部门）","""
+    SELECT d.name AS 部门,IFNULL(SUM(o.amount),0) AS 订单额 FROM employees e LEFT JOIN departments d ON e.dept_id = d.id JOIN orders o ON e.id=o.user_id GROUP BY d.name
+    """),
+    ("练习51：各部门订单笔数","""
+    SELECT d.name AS 部门,COUNT(o.id) AS 订单数 FROM employees e JOIN departments d ON e.dept_id = d.id JOIN orders o ON e.id=o.user_id GROUP BY d.name
+    """),
+    ("练习52：各城市订单总额","""
+    SELECT e.city,IFNULL(SUM(o.amount),0) AS 订单额 FROM employees e LEFT JOIN orders o ON e.id = o.user_id GROUP BY city
+    """),
+    ("练习53：没下单的人分别在哪个部门","""
+    SELECT e.name,d.name AS 部门 FROM employees e LEFT JOIN orders o ON e.id = o.user_id JOIN departments d ON e.dept_id = d.id WHERE o.id IS NULL GROUP BY e.name
+    """),
     #
     #     SELECT ...
     # """),

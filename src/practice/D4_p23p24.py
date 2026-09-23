@@ -54,7 +54,6 @@ def find_index(items, target):
         if n == target:
             return i
     return -1
-
 print(pair_up(["张伟", "李娜", "王强"], [88, 95, 72]))
 print(find_index(["a", "b", "c"], "b"))
 print(find_index(["a", "b", "c"], "z"))
@@ -76,7 +75,6 @@ def safe_index(items, i):
 print(to_int("42"))
 print(to_int("abc"))
 print(to_int(""))
-
 print(safe_index([1,2,3], 1))
 print(safe_index([1,2,3], 9))
 # 34
@@ -115,10 +113,72 @@ def append_line(text, path):
     with open(path,"a",encoding="utf-8-sig") as f:
         i=text+s
         f.write(i)
-def read_lines(path):
+def read_liness(path):
     with open(path,"r",encoding="utf-8-sig") as f:
         lines=[line.strip() for line in f if line.strip()]
         return lines
 append_line("第四行", "out.txt")
-print(read_lines("out.txt"))
-
+print(read_liness("out.txt"))
+# 11
+def long_sentences(rows, min_len):
+    d=[]
+    for i in rows:
+        if len(i["text"])>min_len:
+           d.append(i)
+    return d
+print(long_sentences(rows, 12))
+# 12
+def split_by_length(text, n):
+    d=[]
+    for i in range(0,len(text),n):
+        d.append(text[i:i+n])
+    return d
+print(split_by_length("abcdefg", 3))
+print(split_by_length("abc", 5))
+# 13
+def starts_with(rows, prefix):
+    d=[]
+    for i in rows:
+        if i["text"].startswith(prefix):
+            d.append(i)
+    return d
+print(starts_with(rows, "以前"))
+# 14
+import jieba
+import logging
+jieba.setLogLevel(logging.WARNING)
+BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+with open(os.path.join(BASE,"data","interviews.csv"),"r",encoding="utf-8-sig") as f:
+    words=[]
+    for row in csv.DictReader(f):
+        words+=jieba.lcut(row["text"])
+        word_count=Counter(words)
+def save_counter(counter, path):
+    with open(os.path.join(BASE,path),"w",encoding="utf-8-sig",newline="") as f:
+        writer=csv.writer(f)
+        writer.writerow(["词","次数"])
+        for word,count in word_count.most_common():
+                writer.writerow([word,count])
+save_counter(word_count,"output/word_freq.csv")
+# 15
+def load_csv(path):
+    try:
+        BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        with open(os.path.join(BASE,path),encoding="utf-8-sig") as f:
+            rows=list(csv.DictReader(f))
+            return rows
+    except FileNotFoundError:
+        return []
+print(load_csv("data/interviews.csv"))
+print(load_csv("data/不存在的.csv"))
+# 16
+def merge_csv(paths):
+    BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    d=[]
+    for path in paths:
+        with open(os.path.join(BASE,path),"r",encoding="utf-8-sig") as f:
+            rows=list(csv.DictReader(f))
+            for i in rows:
+                d.append(i)
+    return d
+print(merge_csv(["data/interviews.csv", "data/interviews_batch2.csv"]))
