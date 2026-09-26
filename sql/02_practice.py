@@ -209,6 +209,24 @@ QUERIES = [
     ("练习53：没下单的人分别在哪个部门","""
     SELECT e.name,d.name AS 部门 FROM employees e LEFT JOIN orders o ON e.id = o.user_id JOIN departments d ON e.dept_id = d.id WHERE o.id IS NULL GROUP BY e.name
     """),
+    ("练习54：员工 + 上级姓名","""
+    SELECT e.name AS 员工,m.name AS 上级 FROM employees e LEFT JOIN employees m ON m.id=e.manager_id
+    """),
+    ("练习55：没有上级的人","""
+    SELECT e.name FROM employees e LEFT JOIN employees m ON m.id=e.manager_id WHERE e.manager_id IS NULL
+    """),
+    ("练习56：上级工资比自己高的人","""
+    SELECT e.name,e.salary FROM employees e LEFT JOIN employees m ON m.id = e.manager_id WHERE m.salary > e.salary
+    """),
+    ("练习57：每个上级带几个下属","""
+    SELECT m.name,COUNT(*) AS 下属数 FROM employees e JOIN employees m ON m.id = e.manager_id GROUP BY m.name
+    """),
+    ("练习58：谁带的人最多","""
+    SELECT m.name AS 上级,COUNT(*) AS 下属数 FROM employees e JOIN employees m ON e.manager_id=m.id GROUP BY m.id ORDER BY COUNT(*) DESC LIMIT 1
+    """),
+    ("练习59：每个上级带的团队平均工资","""
+    SELECT m.name AS 上级,COUNT(*) AS 下属数,AVG(e.salary) AS 平均工资 FROM employees e JOIN employees m ON e.manager_id=m.id GROUP BY m.name ORDER BY AVG(e.salary) DESC
+    """),
     #
     #     SELECT ...
     # """),

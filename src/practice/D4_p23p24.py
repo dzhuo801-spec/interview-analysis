@@ -182,3 +182,34 @@ def merge_csv(paths):
                 d.append(i)
     return d
 print(merge_csv(["data/interviews.csv", "data/interviews_batch2.csv"]))
+# 17
+def safe_int(text, default=0):
+    try:
+        return int(text)
+    except ValueError:
+        return default
+print(safe_int("123"))
+print(safe_int("abc"))
+print(safe_int("abc", -1))
+print(safe_int("  42  "))
+# 18
+def safe_div(a,b):
+    try:
+        return a/b
+    except ZeroDivisionError:
+        return None
+print(safe_div(10, 2))
+print(safe_div(10, 0))
+# 19
+def get_field(row, field, default=""):
+    return row.get(field,default)
+print(get_field({"a": 1}, "a"))
+print(get_field({"a": 1}, "b"))
+print(get_field({"a": 1}, "b", "无"))
+
+
+
+
+
+
+
