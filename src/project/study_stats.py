@@ -9,6 +9,7 @@ plt.rcParams["axes.unicode_minus"]=False
 
 BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 png_path=os.path.join(BASE,"output","study_by_subject.png")
+png_path2=os.path.join(BASE,"output","study_by_week.png")
 csv_path=os.path.join(BASE,"output","study_by_summary.csv")
 
 all_days=["周一","周二","周三","周四","周五","周六","周日"]
@@ -47,27 +48,32 @@ def total_hours(records):
     return s
 time=total_hours(records)
 
-def by_subject(records):
-    # 科目总时长
+def group_hours(records, field):
+    # 拿字典
     d={}
     for r in records:
-       d[r.subject]=d.get(r.subject,0)+int(r.minute)/60
+        d[getattr(r,field)]=d.get(getattr(r,field),0)+int(r.minute)/60
     return d
+
+def by_subject(records):
+    # 科目总时长
+    return group_hours(records, "subject")
 data=by_subject(records)
+
+def by_weekday(records):
+    # 每周总时长
+    return group_hours(records, "week")
+week_time=by_weekday(records)
 
 def busiest_weekday(records):
     # 哪个周学习时长最多
-    d={}
-    for r in records:
-        d[r.week]=d.get(r.week,0)+int(r.minute)/60
+    d=by_weekday(records)
     return max(d.items(),key=lambda kv:kv[1])
 max_week=busiest_weekday(records)
 
 def missing_days(records, all_days):
     #哪个周没有学
-    d={}
-    for r in records:
-        d[r.week]=d.get(r.week,0)+int(r.minute)/60
+    d=by_weekday(records)
     result=[]
     for day in all_days:
         if d[day] == 0:
@@ -75,7 +81,7 @@ def missing_days(records, all_days):
     return result
 no_record=missing_days(records, all_days)
 
-def plot_by_subject(data, outpath):
+def plot_bar(data, title,outpath):
     # 画图
     item=sorted(data.items(),key=lambda kv:kv[1],reverse=True)
     labels=[kv[0] for kv in item]
@@ -84,7 +90,7 @@ def plot_by_subject(data, outpath):
     values.reverse()
     fig,ax=plt.subplots(figsize=(8,4))
     ax.barh(labels,values,color="#F5A623")
-    ax.set_title("各科目学习时长")
+    ax.set_title(title)
     ax.set_xlabel("小时数")
     for i,v in enumerate(values):
         ax.text(v + 0.1,i,str(v),va="center")
@@ -109,7 +115,9 @@ def main():
     records=load_records("data/study_log.csv")
     t= total_hours(records)
     d = by_subject(records)
-    plot_by_subject(d, png_path)
+    w=by_weekday(records)
+    plot_bar(d, "各科目学习时长",png_path)
+    plot_bar(w, "各周学习时长",png_path2)
     mw = busiest_weekday(records)
     miss = missing_days(records, all_days)
     rows=[["指标","值"],
@@ -124,5 +132,6 @@ def main():
     print("最忙的周几：", mw[0])
     print("没学的周几：","、" .join(miss))
     print(f"已生成图 + CSV（{n} 行）")
+
 if __name__ == '__main__':
     main()
