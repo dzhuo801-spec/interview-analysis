@@ -227,6 +227,28 @@ QUERIES = [
     ("练习59：每个上级带的团队平均工资","""
     SELECT m.name AS 上级,COUNT(*) AS 下属数,AVG(e.salary) AS 平均工资 FROM employees e JOIN employees m ON e.manager_id=m.id GROUP BY m.name ORDER BY AVG(e.salary) DESC
     """),
+    ("练习60：工资高于全公司平均的人","""
+    SELECT name AS 姓名,salary AS 工资 FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)
+    """),
+    ("练习61： 用 IN 找下过单的人","""
+    SELECT name AS 姓名 FROM employees WHERE id IN (SELECT user_id FROM orders)
+    """),
+    ("练习62：同一件事，用 EXISTS 再写一遍","""
+    SELECT e.name FROM employees e WHERE EXISTS (SELECT 1 FROM orders o WHERE e.id = o.user_id)
+    """),
+    ("练习63：派生表：平均工资超 2 万的部门","""
+    SELECT * FROM (SELECT dept_id,AVG(salary) AS 均薪 FROM employees GROUP BY dept_id) t WHERE 均薪 >20000
+    """),
+    ("练习64：每个部门工资最高的那个人","""
+    SELECT name,dept_id,salary FROM employees e WHERE salary = (SELECT MAX(salary) FROM employees x WHERE e.dept_id=x.dept_id)
+    """),
+    ("练习65：高于本部门平均工资的人","""
+    SELECT name,dept_id,salary FROM employees e WHERE salary > (SELECT AVG(salary) FROM employees x WHERE e.dept_id=x.dept_id)
+    """),
+    # 本部门与全公司都不一样哦
+    ("练习66：高于平均金额的订单","""
+    SELECT id,amount AS 金额 FROM orders  WHERE amount > (SELECT AVG(amount) FROM orders )
+    """),
     #
     #     SELECT ...
     # """),

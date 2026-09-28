@@ -206,8 +206,47 @@ def get_field(row, field, default=""):
 print(get_field({"a": 1}, "a"))
 print(get_field({"a": 1}, "b"))
 print(get_field({"a": 1}, "b", "无"))
-
-
+# 20
+def avg_length(rows,speaker):
+    try:
+        s=0
+        d={}
+        for p in rows:
+            v=p["speaker"]
+            d[v]=d.get(v,0)+1
+            if v == speaker:
+                x=p["text"]
+                a=(len(x))
+                s+=a
+        b=d[speaker]
+        return round(s/b,2)
+    except NameError:
+        return 0
+print(avg_length(rows, "访谈者"))
+print(avg_length(rows, "受访者B"))
+# 21
+def avg_all(rows):
+    try:
+        sd={}
+        cd={}
+        d={}
+        for p in rows:
+            v=p["speaker"]
+            sd[v]=sd.get(v,0)+len(p["text"])
+            cd[v]=cd.get(v,0)+1
+        for k,v1 in sd.items():
+            d[k]=round(sd[k]/cd[k],2)
+        return d
+    except NameError:
+        return 0
+print(avg_all(rows))
+# 22
+def to_percent(n, total):
+    s=(n/total)*100
+    return f"{s:.1f}%"
+print(to_percent(13, 50))   # → '26.0%'
+print(to_percent(0, 50))
+print(to_percent(1, 3))
 
 
 
