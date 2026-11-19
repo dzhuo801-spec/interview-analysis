@@ -25,7 +25,10 @@ class StudyRecord:
         return int(self.minute)/60
     def describe(self):
         return f"{self.date} {self.week} {self.subject} {self.hours()} {self.content}"
-
+# self是面向对象必须要的，是对象本身，当对象被调用时，python会把参数调入到self里面
+# 36行部分其实就是把参数按照csv的数据按照studyrecord类的构造函数的写入rows中
+# hours(self)是作为studyrecord类的一个函数，而self.hours是将其进行调用的
+# 因为hours是将类里面的时间将其转化为分钟便于进行调用,而且类是记录studyrecord的各项参数（属性）的，小时也是他的参数（属性）之一
 def load_records(path):
     #存入StudyRecord中
     try:
