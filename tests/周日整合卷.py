@@ -259,11 +259,21 @@ count_by_field(".../interviews.csv", "speaker")
 #   3. path 的上级目录不存在时，**自动创建**（os.makedirs）
 # ============================================================
 def save_pairs(pairs, path):
-    # TODO: 你写这里
-    # 提示：for word, count in pairs:   ← 这是循环里拆包
-    pass
-
-
+   s=0
+   os.makedirs(os.path.dirname(path),exist_ok=True)
+   with open(path,"w",encoding="utf-8-sig",newline="") as f:
+       writer=csv.writer(f)
+       writer.writerow(["词","次数"])
+       for i,v in pairs:
+           s+=1
+           writer.writerow([i,v])
+   return s
+# ⚠️ 2026-10-04 AI 删掉了这里的一句顶层测试调用：
+#     save_pairs([("的", 28), ("了", 21)], "tests/_tmp/新目录/t7.csv")
+#   原因：① 相对路径，换个工作目录就 FileNotFoundError
+#         ② 写在【顶层】，一炸整份卷子的判分代码都不跑（连总分都看不到）
+#         ③ 评分器自己会调用 save_pairs（它传的是绝对路径）—— 这句是多余的
+#   ⭐ 要自己测，把测试写在【文件最后】，那时 BASE / DATA_DIR 已经定义好了。
 # ============================================================
 # 题 8（16 分）⭐ 综合作战题 —— 最像真实工作的一题
 # 📖 用到的新知识 → 看 `手册\文件与CSV精讲.md`（第 10 步 + 附：路径）
@@ -299,10 +309,28 @@ def save_pairs(pairs, path):
 #   ⑤ Counter 数 speaker，取前 top_n
 # ============================================================
 def analyze(data_dir, top_n=3):
-    # TODO: 你写这里
-    pass
+    if not os.path.isdir(data_dir):
+        return {"total_rows": 0, "n_speakers": 0, "top_speakers": []}
 
+    rows = []
+    for name in os.listdir(data_dir):
+        if name.startswith("interviews") and name.endswith(".csv"):
+            full = os.path.join(data_dir, name)
+            with open(full, encoding="utf-8-sig") as f:
+                for row in csv.DictReader(f):
+                    if "speaker" not in row or "text" not in row:
+                        continue
+                    if not row["text"].strip():
+                        continue
+                    rows.append(row)
 
+    counter = Counter(row["speaker"] for row in rows)
+    return {
+        "total_rows": len(rows),
+        "n_speakers": len(counter),
+        "top_speakers": counter.most_common(top_n),
+    }
+print(analyze("E:\\ai\\interview-analysis\\data", top_n=3))
 # ============================================================
 # 以下不用改 —— 自动批改
 # ============================================================

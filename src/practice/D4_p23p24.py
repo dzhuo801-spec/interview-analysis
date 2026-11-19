@@ -143,6 +143,7 @@ def starts_with(rows, prefix):
             d.append(i)
     return d
 print(starts_with(rows, "以前"))
+
 # 14
 import jieba
 import logging
@@ -247,8 +248,153 @@ def to_percent(n, total):
 print(to_percent(13, 50))   # → '26.0%'
 print(to_percent(0, 50))
 print(to_percent(1, 3))
-
-
-
-
-
+# 23
+def list_csv(dirpath):
+    d=[]
+    BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    lu=os.listdir(os.path.join(BASE,dirpath))
+    for i in lu:
+        if i.endswith(".csv"):
+            t=os.path.join(dirpath,i)
+            d.append(t)
+    return d
+print(list_csv("data"))
+# 24
+def read_all(dirpath):
+    try:
+        d=[]
+        BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        y=os.listdir(os.path.join(BASE,dirpath))
+        for join in y:
+            if join.endswith(".csv"):
+                with open(os.path.join(BASE,dirpath,join),"r",encoding="utf-8-sig") as f:
+                    for row in csv.DictReader(f):
+                        d.append(row)
+        return d
+    except FileNotFoundError:
+        return []
+print(read_all("data"))
+print(read_all("不存在的目录"))
+# 25
+def read_all_with_source(dirpath):
+    l=[]
+    BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    y=os.listdir(os.path.join(BASE,dirpath))
+    for join in y:
+        if join.endswith(".csv"):
+            with open(os.path.join(BASE,dirpath,join),"r",encoding="utf-8-sig") as f:
+                for row in csv.DictReader(f):
+                    d1=dict(row)
+                    d1["source_file"]=join
+                    l.append(d1)
+    return l
+rows=read_all_with_source("data")
+print(rows[0]["source_file"])
+# 26
+square=lambda x:x**2
+is_even=lambda x:x%2==2
+bigger=lambda x,y:x if x>y else y
+print(square(4))
+print(is_even(7))
+print(bigger(3, 9))
+# 27
+def top_n(word_count, n):
+    d=[]
+    for i in word_count.items():
+        d.append(i)
+    s=sorted(d,key=lambda x:x[1],reverse=True)[:n]
+    return s
+wc = {"的": 28, "了": 21, "这个": 15, "现在": 14, "都": 10}
+print(top_n(wc, 3))
+print(top_n(wc, 10))
+# 28
+def to_ints(str_list):
+     return list(map(int,str_list))
+print(to_ints(["1", "2", "3"]))
+print(to_ints(["10"]))
+print(to_ints([]))
+# 29
+def long_texts(rows, min_len):
+    return list(filter(lambda x:len(x["text"])>min_len,rows))
+BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+with open(os.path.join(BASE, "data", "interviews.csv"), encoding="utf-8-sig") as f:
+    rows = list(csv.DictReader(f))
+print(len(long_texts(rows, 12)))    # → 23
+print(long_texts(rows, 12)[0])
+# 30
+def split_first(nums):
+    if not nums:
+        return None,[]#必须两个，不然会报错，如果一个的话，另一个分什么
+    a,*b=nums
+    return a,b
+first, rest = split_first([1,2,3,4,5])
+first2, rest2 = split_first([])
+print(first)
+print(rest)
+print(first2)
+print(rest2)
+# 31
+def pair_up(names, scores):
+    return dict(zip(names,scores))
+def find_index(items, target):
+    for i,v in enumerate(items):
+        if v==target:
+            return i
+        elif target not in items:
+            return -1
+print(pair_up(["张伟", "李娜", "王强"], [88, 95, 72]))
+print(find_index(["a", "b", "c"], "b")) # → 1
+print(find_index(["a", "b", "c"], "z"))
+# 32
+def show_args(*args, **kwargs):
+   print(f"args={args}")
+   print(f"kwargs={kwargs}")
+show_args(1, 2, 3, x=4, y=5)
+args=[1,2,3,4]
+show_args(*args)
+# 33
+def to_int(text):
+    try:
+        return int(text)
+    except ValueError:
+        return None
+def safe_index(items, i):
+    try:
+        return items[i]
+    except IndexError:
+        return None
+print(to_int("42"))
+print(to_int("abc"))
+print(to_int(""))
+print(safe_index([1,2,3], 1))
+print(safe_index([1,2,3], 9))
+# 34
+class NegativeError(Exception):
+    pass
+def sqrt_approx(x):
+    if x>=0:
+        return x**0.5
+    raise NegativeError (f"不能对负数开平方{x}")
+try:
+    sqrt_approx(-4)
+except NegativeError as e:
+    print("信息形如：",e)
+print(sqrt_approx(9))
+# 35
+P = r"E:\ai\interview-analysis\data\interviews.csv"
+NO = r"E:\ai\interview-analysis\data\没有这个.csv"
+def safe_load_csv(path, default=None):
+    if default is None:
+       default=[]
+    try:
+        with open(path,"r",encoding="utf-8-sig") as f:
+            return list(csv.DictReader(f))
+    except FileNotFoundError:
+        print(f"找不到文件: {path},文件是{P}")
+        return default
+    except UnicodeError:
+        print(f"警告，找不到文件: {path}")
+        return default
+print(safe_load_csv(P))
+print(safe_load_csv(NO))
+print(safe_load_csv(NO, default=-1))

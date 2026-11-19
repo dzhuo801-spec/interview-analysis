@@ -39,18 +39,23 @@ QUERIES = [
     ("练习5: 查出所有部门", """
         SELECT * FROM departments
     """),
+
     ("练习6：查出姓名+城市","""
         SELECT name,city FROM employees
     """),
+
     ("练习7：查工资最高的3人","""
         SELECT name,salary FROM employees ORDER BY salary DESC LIMIT 3
     """),
+
     ("练习8:查所有部门名","""
         SELECT name FROM departments 
     """),
+
     ("练习9：定表单前3名","""
         SELECT * FROM orders LIMIT 3
     """),
+
     ("练习10：查出所有北京员工","""
         SELECT name,city FROM employees WHERE city = '北京' 
     """),
@@ -248,6 +253,68 @@ QUERIES = [
     # 本部门与全公司都不一样哦
     ("练习66：高于平均金额的订单","""
     SELECT id,amount AS 金额 FROM orders  WHERE amount > (SELECT AVG(amount) FROM orders )
+    """),
+    ("练习67：全公司工资排名","""
+    SELECT name,salary,ROW_NUMBER() OVER (ORDER BY salary DESC) AS rn FROM employees 
+    """),
+    ("练习68：部门内排名","""
+    SELECT name,dept_id,salary,ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rk FROM employees
+    """),
+    ("练习69：高于平均金额的订单","""
+    SELECT name,salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) AS rn,
+    RANK() OVER (ORDER BY salary DESC) AS rk,
+    DENSE_RANK() OVER (ORDER BY salary DESC) AS dr
+    FROM employees
+    """),
+    ("练习70：每个部门工资最高的人（窗口函数版）","""
+    SELECT name,dept_id,salary FROM employees e WHERE salary = (SELECT MAX(salary) salary FROM employees x WHERE e.dept_id=x.dept_id)
+    """),
+    ("练习70.2：每个部门工资最高的人（窗口函数版）","""
+    SELECT * FROM (SELECT name,dept_id,salary,ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn FROM employees) t WHERE rn = 1
+    """),
+    ("练习71：每个部门工资前 2 名","""
+    SELECT * FROM (SELECT name,salary,ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn FROM employees ) t WHERE rn <3
+    """),
+    ("练习72：按入职日期排名","""
+    SELECT name,hire_date,ROW_NUMBER() OVER (ORDER BY hire_date ASC) AS rk FROM employees
+    """),
+    ("练习73：按入职顺序累计工资","""
+    SELECT name,hire_date,salary,SUM(salary) OVER (ORDER BY hire_date ASC) AS 累计 FROM employees
+    """),
+    ("练习74：部门薪资总额（不减少行数）","""
+    SELECT name,dept_id,salary,SUM(salary) OVER (PARTITION BY dept_id ) AS 部门累计 FROM employees
+    """),
+    ("练习75：每个人的工资占部门百分比","""
+    SELECT name,dept_id,ROUND(salary*100.0/SUM(salary) OVER (PARTITION BY dept_id ),1) AS 占比 FROM employees
+    """),
+    ("练习76：部门内按工资累计","""
+    SELECT name,dept_id,salary,SUM(salary) OVER (PARTITION BY dept_id ORDER BY salary DESC) AS 累计 FROM employees
+    """),
+    ("练习77：部门平均工资（挂到每一行）","""
+    SELECT name,dept_id,salary,ROUND(AVG(salary) OVER (PARTITION BY dept_id),2) AS 平均工资,salary-AVG(salary) OVER (PARTITION BY dept_id) AS 和部门平均的差 FROM employees
+    """),
+    ("练习78.1：证明窗口函数不减少行数","""
+    SELECT name,dept_id FROM employees GROUP BY dept_id
+    """),
+    ("练习78.2：证明窗口函数不减少行数","""
+    SELECT name,dept_id,ROW_NUMBER() OVER (PARTITION BY dept_id) AS 排名 FROM employees
+    """),
+    ("练习79：每个部门工资前 3 名","""
+    SELECT * FROM (SELECT name,dept_id,salary,ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn FROM employees) t WHERE rn<=3
+    """),
+    # 不会因为，刚好三个人而且刚好包含了
+    ("练习80:城市平均工资排名","""
+    SELECT city,ROUND(AVG(salary),2) AS 均薪,ROW_NUMBER() OVER (ORDER BY AVG(salary) DESC) AS rn FROM employees GROUP BY city
+    """),
+    ("练习81:低于本部门平均工资的人 + 差多少","""
+    SELECT name,dept_id,salary,(SELECT AVG(salary) FROM employees x WHERE e.dept_id= x.dept_id)-salary AS 平均差额 FROM employees e WHERE salary < (SELECT AVG(salary) FROM employees x WHERE e.dept_id= x.dept_id)
+    """),
+    ("练习82：各部门五列综合报表","""
+    SELECT d.name AS 部门,COUNT(DISTINCT(e.id)) AS 人数,ROUND(AVG(DISTINCT(e.salary)),0) AS 均薪,SUM(o.amount) AS 订单额,ROUND(SUM(o.amount)/COUNT(DISTINCT(e.id)),2) AS 人均订单额 FROM employees e LEFT JOIN departments d ON e.dept_id=d.id LEFT JOIN orders o ON e.id=o.user_id GROUP BY e.dept_id
+    """),
+    ("练习83：找出高薪但没业绩的人","""
+    SELECT DISTINCT(e.name),e.salary,d.name AS 部门 FROM employees e LEFT JOIN departments d ON e.dept_id=d.id LEFT JOIN orders o ON e.id=o.user_id WHERE o.id IS NULL AND salary > (SELECT AVG(salary) FROM employees)
     """),
     #
     #     SELECT ...
