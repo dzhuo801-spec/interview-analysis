@@ -8,22 +8,26 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.sans-serif"]=["Microsoft YaHei","SimHei"]
 plt.rcParams["axes.unicode_minus"]=False
 KEY = open(os.path.join(os.path.dirname(__file__), "key.txt"), encoding="utf-8").read().strip()
+用量=[]
 def text_tab(文本):
     r = requests.post(
     "https://api.deepseek.com/chat/completions",
     headers={"Authorization": f"Bearer {KEY}"},
     json={
-         "model": "deepseek-chat",
+         "model": "deepseek-flash",
             "temperature": 0,
+            "thinking": {"type": "disabled"},
+        # 放弃思考
             "messages": [
                 {"role": "system", "content": '只输出一个 json，不要解释、不要代码块，提及人物，提及的是谁：比如说老一辈，年轻人，小孩。并且主题禁止使用[变迁/变化/其他]万金油的词，主题必须是具体是事务，不是抽象的过程'
                                               '格式：{"主题": "一个词", "情绪": "一个词","人物": "一个词"}'},
-
                 {"role": "user", "content": 文本},
             ],
         },
     )
     print(r.status_code)
+    print(r.json()["usage"])
+    用量.append(r.json()["usage"])
     return r.json()["choices"][0]["message"]["content"]
 BASE=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 idt=os.listdir(os.path.join(BASE,"data"))
@@ -74,3 +78,21 @@ plot(zi1.index,zi1.values,"访谈_人物.png")
 def csv_cla(path):
     return df2.to_csv(os.path.join(os.path.dirname(__file__),path),index=False,encoding="utf-8-sig")
 csv_cla("table.csv")
+总p=0
+总c=0
+for u in 用量:
+    总p=总p+u["prompt_tokens"]
+    总c=总c+u["completion_tokens"]
+ts=总p/1000000*1+总c/1000000*4
+print("调用次数",len(用量))
+print("总prompt",总p)
+print("总completion",总c)
+print("单条平均prompt",总p/len(用量))
+print("总成本（元）",ts)
+总hit=0
+总miss=0
+for u in 用量:
+    总hit=总hit+u["prompt_cache_hit_tokens"]
+    总miss=总miss+u["prompt_cache_miss_tokens"]
+print("命中",总hit)
+print("未命中",总miss)
